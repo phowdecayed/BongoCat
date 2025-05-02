@@ -148,8 +148,8 @@ async function handleOk() {
       gap="small"
       vertical
     >
-      <Flex align="center">
-        <span>{{ t('updateApp.updateVersion') }}：</span>
+      <Flex align="center" justify="space-between">
+        <span class="whitespace-nowrap">{{ t('updateApp.updateVersion') }}：</span>
         <span>
           <span>{{ state.update?.currentVersion }} 👉 </span>
           <a
@@ -160,13 +160,13 @@ async function handleOk() {
         </span>
       </Flex>
 
-      <Flex align="center">
-        <span>{{ t('updateApp.updateDate') }}：</span>
+      <Flex align="center" justify="space-between">
+        <span class="whitespace-nowrap">{{ t('updateApp.updateDate') }}：</span>
         <span>{{ state.update?.date }}</span>
       </Flex>
 
       <Flex vertical>
-        <span>{{ t('updateApp.updateNotes') }}：</span>
+        <span class="whitespace-nowrap">{{ t('updateApp.updateNotes') }}：</span>
 
         <VueMarkdown
           class="update-note max-h-40 overflow-auto"

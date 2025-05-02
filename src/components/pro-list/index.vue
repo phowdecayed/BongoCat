@@ -25,5 +25,5 @@ const { title } = defineProps<{
     >
       <slot />
     </Flex>
-  </FLex>
+  </Flex>
 </template>

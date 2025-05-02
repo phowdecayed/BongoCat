@@ -53,7 +53,7 @@ const currentComponent = computed(() => {
 <template>
   <Flex class="h-screen">
     <div
-      class="h-full w-30 flex flex-col items-center gap-4 bg-gradient-from-primary-1 bg-gradient-to-black/1 bg-gradient-linear"
+      class="h-full w-40 flex flex-col items-center gap-4 bg-gradient-from-primary-1 bg-gradient-to-black/1 bg-gradient-linear"
       :class="[isMac ? 'pt-8' : 'pt-4']"
       data-tauri-drag-region
     >
@@ -68,11 +68,11 @@ const currentComponent = computed(() => {
         <span class="font-bold">{{ appStore.name }}</span>
       </div>
 
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-2 w-full px-2">
         <div
           v-for="(item, index) in menus"
           :key="item.label"
-          class="size-20 flex flex-col cursor-pointer items-center justify-center gap-2 rounded-lg hover:bg-color-7 text-color-3 transition"
+          class="w-full h-20 flex flex-col cursor-pointer items-center justify-center gap-2 rounded-lg hover:bg-color-7 text-color-3 transition"
           :class="{ 'bg-white! text-primary-5 font-bold': current === index }"
           @mousedown="current = index"
         >
@@ -81,13 +81,13 @@ const currentComponent = computed(() => {
             :class="item.icon"
           />
 
-          <span>{{ item.label }}</span>
+          <span class="whitespace-nowrap px-1">{{ item.label }}</span>
         </div>
       </div>
     </div>
 
     <div
-      class="flex-1 bg-color-8 p-4"
+      class="flex-1 bg-color-8 p-4 overflow-auto"
       data-tauri-drag-region
     >
       <component :is="currentComponent" />

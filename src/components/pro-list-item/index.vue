@@ -39,7 +39,7 @@ const hasDescription = computed(() => {
         :class="{ 'ml-4': hasIcon }"
         vertical
       >
-        <div class="text-sm font-medium">
+        <div class="text-sm font-medium min-w-40">
           {{ title }}
         </div>
 
