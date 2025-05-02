@@ -38,7 +38,7 @@ export const useModelStore = defineStore('model', () => {
       id: 'standard',
       name: 'Standard Model',
       author: 'BongoCat Team',
-      preview: '/images/model-previews/standard.png',
+      preview: '/images/logo.png',
       path: '/models/standard',
       isDefault: true
     },
@@ -46,7 +46,7 @@ export const useModelStore = defineStore('model', () => {
       id: 'keyboard',
       name: 'Keyboard Model',
       author: 'BongoCat Team',
-      preview: '/images/model-previews/keyboard.png',
+      preview: '/images/logo.png',
       path: '/models/keyboard',
       isDefault: true
     }
@@ -57,6 +57,12 @@ export const useModelStore = defineStore('model', () => {
   
   // Tanda model sedang dimuat
   const isLoading = ref<boolean>(false)
+  
+  // Fungsi untuk memuat ulang daftar model
+  function refreshModels() {
+    // Trigger reactivity
+    availableModels.value = [...availableModels.value]
+  }
   
   // Menambahkan model kustom baru
   function addCustomModel(model: Omit<ModelInfo, 'id' | 'isDefault'>) {
@@ -115,8 +121,10 @@ export const useModelStore = defineStore('model', () => {
     removeCustomModel,
     selectModel,
     selectedModel,
+    refreshModels,
     $tauri: {
       start() {
+        refreshModels() // Panggil saat inisialisasi store
         return Promise.resolve()
       }
     }
