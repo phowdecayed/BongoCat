@@ -48,7 +48,7 @@ const handleLanguageChange = async (value: Language) => {
 </script>
 
 <template>
-  <ProList :title="t('general.section.application')" class="mb-4">
+  <ProList :title="t('general.section.application')">
     <ProListItem :title="t('general.alwaysOnTop')">
       <Switch v-model:checked="generalStore.alwaysOnTop" />
     </ProListItem>
@@ -60,7 +60,7 @@ const handleLanguageChange = async (value: Language) => {
     </ProListItem>
   </ProList>
 
-  <ProList :title="t('general.language.title')" class="mb-4">
+  <ProList :title="t('general.language.title')">
     <ProListItem>
       <Select
         v-model:value="languageStore.language"
@@ -71,7 +71,7 @@ const handleLanguageChange = async (value: Language) => {
     </ProListItem>
   </ProList>
 
-  <ProList :title="t('general.section.updates')" class="mb-4">
+  <ProList :title="t('general.section.updates')">
     <ProListItem :title="t('general.autoCheckUpdates')">
       <Switch v-model:checked="generalStore.autoCheckUpdate" />
     </ProListItem>

@@ -22,7 +22,7 @@ const hasDescription = computed(() => {
 <template>
   <Flex
     :align="vertical ? void 0 : 'center'"
-    class="b b-color-2 rounded-lg b-solid bg-white p-4"
+    class="pro-list-item"
     gap="middle"
     justify="space-between"
     :vertical="vertical"
@@ -31,7 +31,7 @@ const hasDescription = computed(() => {
       <slot name="icon">
         <div
           v-if="icon"
-          class="text-4 min-w-8 flex-shrink-0"
+          class="pro-list-item-icon"
           :class="icon"
         />
       </slot>
@@ -40,12 +40,12 @@ const hasDescription = computed(() => {
         :class="{ 'ml-4': hasIcon, 'w-full': vertical }"
         vertical
       >
-        <div v-if="title" class="text-sm font-medium">
+        <div v-if="title" class="pro-list-item-title">
           {{ title }}
         </div>
 
         <div
-          class="text-xs [&_a]:(active:text-color-primary-7 hover:text-color-primary-5 text-color-3) text-color-3"
+          class="pro-list-item-description"
           :class="{ 'mt-2': hasDescription }"
         >
           <slot name="description">
@@ -60,13 +60,47 @@ const hasDescription = computed(() => {
 </template>
 
 <style scoped>
-.min-w-8 {
-  min-width: 2rem;
+.pro-list-item {
+  border: 1px solid var(--ant-color-split);
+  border-radius: 0.5rem;
+  background-color: white;
+  padding: 1rem;
+  margin-bottom: 0.75rem;
 }
+
+.pro-list-item:last-child {
+  margin-bottom: 0;
+}
+
+.pro-list-item-icon {
+  min-width: 2rem;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+
+.pro-list-item-title {
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.pro-list-item-description {
+  font-size: 0.75rem;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.pro-list-item-description a {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.pro-list-item-description a:hover {
+  color: var(--ant-color-primary-5);
+}
+
+.pro-list-item-description a:active {
+  color: var(--ant-color-primary-7);
+}
+
 .w-full {
   width: 100%;
-}
-.flex-shrink-0 {
-  flex-shrink: 0;
 }
 </style>

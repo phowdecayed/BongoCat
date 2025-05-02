@@ -2,6 +2,7 @@ import { LogicalSize } from '@tauri-apps/api/dpi'
 import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow'
 import { round } from 'es-toolkit'
 import { computed, watch } from 'vue'
+import { useDebounceFn } from '@vueuse/core'
 
 import live2d from '../utils/live2d'
 import { getCursorMonitor } from '../utils/monitor'
@@ -20,7 +21,12 @@ export function useModel() {
   watch(() => catStore.mode, handleLoad)
 
   const backgroundImagePath = computed(() => {
-    return `/images/backgrounds/${catStore.mode}.png`
+    if (modelStore.selectedModelId !== 'standard' && 
+        modelStore.selectedModelId !== 'keyboard' && 
+        modelStore.selectedModelId !== catStore.mode) {
+      return `/images/backgrounds/${modelStore.selectedModelId}.png`;
+    }
+    return `/images/backgrounds/${catStore.mode}.png`;
   })
 
   useTauriListen<number>(LISTEN_KEY.PLAY_EXPRESSION, ({ payload }) => {
@@ -28,11 +34,30 @@ export function useModel() {
   })
 
   async function handleLoad() {
-    const data = await live2d.load(`/models/${catStore.mode}/cat.model3.json`)
-
-    handleResize()
-
-    Object.assign(modelStore, data)
+    let modelPath = `/models/${catStore.mode}/cat.model3.json`;
+    
+    if (modelStore.selectedModelId !== 'standard' && modelStore.selectedModelId !== 'keyboard') {
+      const selectedModel = modelStore.selectedModel;
+      if (selectedModel) {
+        modelPath = `${selectedModel.path}/cat.model3.json`;
+      }
+    } else {
+      localStorage.setItem('bongocat-mode', catStore.mode);
+    }
+    
+    modelStore.isLoading = true;
+    
+    try {
+      const data = await live2d.load(modelPath);
+      
+      handleResize();
+  
+      Object.assign(modelStore, data);
+    } catch (error) {
+      console.error('Error loading model:', error);
+    } finally {
+      modelStore.isLoading = false;
+    }
   }
 
   function handleDestroy() {
@@ -46,7 +71,7 @@ export function useModel() {
     const { innerWidth, innerHeight } = window
     const { width, height } = await getImageSize(backgroundImagePath.value)
 
-    live2d.model?.scale.set(innerWidth / width)
+    live2d.model.scale.set(innerWidth / width)
 
     if (round(innerWidth / innerHeight, 1) === round(width / height, 1)) return
 
@@ -58,12 +83,25 @@ export function useModel() {
     )
   }
 
-  function handleKeyDown(value: string[]) {
-    const hasArrowKey = value.some(key => key.endsWith('Arrow'))
-    const hasNonArrowKey = value.some(key => !key.endsWith('Arrow'))
+  // Bungkus dengan debounce untuk mencegah pembaruan yang terlalu sering
+  const updateHandParameters = useDebounceFn((hasArrowKey: boolean, hasNonArrowKey: boolean) => {
+    if (!live2d.model) return;
+    
+    try {
+      live2d.setParameterValue('CatParamRightHandDown', hasArrowKey);
+      live2d.setParameterValue('CatParamLeftHandDown', hasNonArrowKey);
+    } catch (err) {
+      console.error('Error setting parameter for default model:', err);
+    }
+  }, 16); // 16ms ~= 60fps untuk animasi yang halus
 
-    live2d.setParameterValue('CatParamRightHandDown', hasArrowKey)
-    live2d.setParameterValue('CatParamLeftHandDown', hasNonArrowKey)
+  function handleKeyDown(value: string[]) {
+    if (!live2d.model) return;
+    
+    const hasArrowKey = value.some(key => key.endsWith('Arrow'));
+    const hasNonArrowKey = value.some(key => !key.endsWith('Arrow'));
+
+    updateHandParameters(hasArrowKey, hasNonArrowKey);
   }
 
   async function handleMouseMove() {

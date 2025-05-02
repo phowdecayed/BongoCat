@@ -6,7 +6,6 @@ import { useI18n } from 'vue-i18n'
 
 import { hideWindow, showWindow } from '@/plugins/window'
 import { useCatStore } from '@/stores/cat'
-import { useLanguageStore } from '@/stores/language'
 import { isMac } from '@/utils/platform'
 
 interface ModeOption {
@@ -16,7 +15,6 @@ interface ModeOption {
 
 export function useSharedMenu() {
   const catStore = useCatStore()
-  const languageStore = useLanguageStore()
   const { t, locale } = useI18n()
   
   const modeOptions = computed<ModeOption[]>(() => [

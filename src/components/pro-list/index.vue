@@ -8,12 +8,12 @@ const { title } = defineProps<{
 
 <template>
   <Flex
-    class="mb-4"
+    class="pro-list"
     gap="small"
     vertical
   >
     <div
-      class="text-base font-medium"
+      class="pro-list-title"
       data-tauri-drag-region
     >
       {{ title }}
@@ -29,7 +29,13 @@ const { title } = defineProps<{
 </template>
 
 <style scoped>
-.mb-4 {
-  margin-bottom: 1rem;
+.pro-list {
+  margin-bottom: 1.5rem;
+}
+
+.pro-list-title {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
 }
 </style>

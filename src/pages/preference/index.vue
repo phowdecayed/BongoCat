@@ -58,43 +58,43 @@ const currentComponent = computed(() => {
 </script>
 
 <template>
-  <Flex class="h-screen">
+  <Flex class="preference-container">
     <div
-      class="h-full w-30 flex flex-col items-center gap-4 bg-gradient-from-primary-1 bg-gradient-to-black/1 bg-gradient-linear"
+      class="preference-sidebar"
       :class="[isMac ? 'pt-8' : 'pt-4']"
       data-tauri-drag-region
     >
-      <div class="flex flex-col items-center gap-2">
-        <div class="b b-color-2 rounded-2xl b-solid">
+      <div class="preference-logo">
+        <div class="preference-logo-image">
           <img
-            class="size-15"
+            class="preference-logo-img"
             src="/images/logo.png"
           >
         </div>
 
-        <span class="font-bold">{{ appStore.name }}</span>
+        <span class="preference-app-name">{{ appStore.name }}</span>
       </div>
 
-      <div class="flex flex-col gap-2 w-full px-2">
+      <div class="preference-menu">
         <div
           v-for="(item, index) in menus"
           :key="item.label"
-          class="size-20 flex flex-col cursor-pointer items-center justify-center gap-2 rounded-lg hover:bg-color-7 text-color-3 transition"
-          :class="{ 'bg-white! text-primary-5 font-bold': current === index }"
+          class="preference-menu-item"
+          :class="{ 'preference-menu-item-active': current === index }"
           @mousedown="current = index"
         >
           <div
-            class="size-8"
+            class="preference-menu-icon"
             :class="item.icon"
           />
 
-          <span class="text-center whitespace-normal text-sm px-1">{{ item.label }}</span>
+          <span class="preference-menu-label">{{ item.label }}</span>
         </div>
       </div>
     </div>
 
     <div
-      class="flex-1 bg-color-8 p-4 overflow-auto"
+      class="preference-content"
       data-tauri-drag-region
     >
       <component :is="currentComponent" />
@@ -105,7 +105,92 @@ const currentComponent = computed(() => {
 </template>
 
 <style scoped>
-.text-center {
+.preference-container {
+  height: 100vh;
+}
+
+.preference-sidebar {
+  height: 100%;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  background: linear-gradient(to bottom, var(--ant-color-primary-1), rgba(0, 0, 0, 0.01));
+}
+
+.preference-logo {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.preference-logo-image {
+  border: 1px solid var(--ant-color-border);
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.preference-logo-img {
+  width: 60px;
+  height: 60px;
+}
+
+.preference-app-name {
+  font-weight: bold;
+}
+
+.preference-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0 0.5rem;
+}
+
+.preference-menu-item {
+  width: 100%;
+  height: 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  color: rgba(0, 0, 0, 0.65);
+  transition: all 0.3s;
+}
+
+.preference-menu-item:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.preference-menu-item-active {
+  background-color: white !important;
+  color: var(--ant-color-primary-5);
+  font-weight: bold;
+}
+
+.preference-menu-icon {
+  width: 2rem;
+  height: 2rem;
+}
+
+.preference-menu-label {
   text-align: center;
+  white-space: normal;
+  font-size: 0.875rem;
+  padding: 0 0.25rem;
+}
+
+.preference-content {
+  flex: 1;
+  background-color: #f5f5f5;
+  padding: 1rem;
+  overflow: auto;
 }
 </style>
