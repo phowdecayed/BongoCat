@@ -30,7 +30,6 @@ const modeList: SelectProps['options'] = [
         v-model:value="catStore.mode"
         :options="modeList"
         :title="t('cat.selectMode')"
-        style="width: 100%"
       />
     </ProListItem>
   </ProList>
@@ -49,7 +48,7 @@ const modeList: SelectProps['options'] = [
     >
       <Slider
         v-model:value="catStore.opacity"
-        class="m-0! w-full"
+        class="m-0!"
       />
     </ProListItem>
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { Flex } from 'ant-design-vue'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import About from './components/about/index.vue'
@@ -11,16 +11,23 @@ import Model from './components/model/index.vue'
 import UpdateApp from '@/components/update-app/index.vue'
 import { useTray } from '@/composables/useTray'
 import { useAppStore } from '@/stores/app'
+import { useLanguageStore } from '@/stores/language'
 import { isMac } from '@/utils/platform'
 
-const { createTray } = useTray()
+const { createTray, updateTrayMenu } = useTray()
 const appStore = useAppStore()
+const languageStore = useLanguageStore()
 const current = ref(0)
-const { t } = useI18n()
+const { t, locale } = useI18n()
 
 onMounted(async () => {
-  createTray()
+  await createTray()
 })
+
+// Watch untuk perubahan bahasa
+watch(() => languageStore.language, () => {
+  updateTrayMenu()
+}, { immediate: true })
 
 const menus = computed(() => [
   {
@@ -53,7 +60,7 @@ const currentComponent = computed(() => {
 <template>
   <Flex class="h-screen">
     <div
-      class="h-full w-40 flex flex-col items-center gap-4 bg-gradient-from-primary-1 bg-gradient-to-black/1 bg-gradient-linear"
+      class="h-full w-30 flex flex-col items-center gap-4 bg-gradient-from-primary-1 bg-gradient-to-black/1 bg-gradient-linear"
       :class="[isMac ? 'pt-8' : 'pt-4']"
       data-tauri-drag-region
     >
@@ -72,7 +79,7 @@ const currentComponent = computed(() => {
         <div
           v-for="(item, index) in menus"
           :key="item.label"
-          class="w-full h-20 flex flex-col cursor-pointer items-center justify-center gap-2 rounded-lg hover:bg-color-7 text-color-3 transition"
+          class="size-20 flex flex-col cursor-pointer items-center justify-center gap-2 rounded-lg hover:bg-color-7 text-color-3 transition"
           :class="{ 'bg-white! text-primary-5 font-bold': current === index }"
           @mousedown="current = index"
         >
@@ -81,7 +88,7 @@ const currentComponent = computed(() => {
             :class="item.icon"
           />
 
-          <span class="whitespace-nowrap px-1">{{ item.label }}</span>
+          <span class="text-center whitespace-normal text-sm px-1">{{ item.label }}</span>
         </div>
       </div>
     </div>
@@ -96,3 +103,9 @@ const currentComponent = computed(() => {
 
   <UpdateApp />
 </template>
+
+<style scoped>
+.text-center {
+  text-align: center;
+}
+</style>

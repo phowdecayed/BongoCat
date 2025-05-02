@@ -8,7 +8,7 @@ import { TrayIcon } from '@tauri-apps/api/tray'
 import { openUrl } from '@tauri-apps/plugin-opener'
 import { exit, relaunch } from '@tauri-apps/plugin-process'
 import { useDebounceFn } from '@vueuse/core'
-import { watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 import { GITHUB_LINK, LISTEN_KEY } from '../constants'
@@ -18,21 +18,41 @@ import { isMac } from '../utils/platform'
 import { useSharedMenu } from './useSharedMenu'
 
 import { useCatStore } from '@/stores/cat'
+import { useLanguageStore } from '@/stores/language'
 
 const TRAY_ID = 'BONGO_CAT_TRAY'
 
 export function useTray() {
   const catStore = useCatStore()
-  const { getSharedMenu } = useSharedMenu()
-  const { t } = useI18n()
+  const languageStore = useLanguageStore()
+  const { getSharedMenu, setUpdateMenuCallback } = useSharedMenu()
+  const { t, locale } = useI18n()
+  const trayInitialized = ref(false)
 
   const debouncedUpdateTrayMenu = useDebounceFn(() => {
     updateTrayMenu()
+  }, 100)
+
+  // Watch for changes in cat store
+  watch(() => catStore, () => {
+    if (trayInitialized.value) {
+      debouncedUpdateTrayMenu()
+    }
+  }, { deep: true })
+
+  // Watch for language changes
+  watch(() => languageStore.language, () => {
+    if (trayInitialized.value) {
+      debouncedUpdateTrayMenu()
+    }
   })
 
-  watch(() => catStore, () => {
-    debouncedUpdateTrayMenu()
-  }, { deep: true })
+  // Watch locale changes directly
+  watch(() => locale.value, () => {
+    if (trayInitialized.value) {
+      debouncedUpdateTrayMenu()
+    }
+  })
 
   const createTray = async () => {
     const tray = await getTrayById()
@@ -55,7 +75,15 @@ export function useTray() {
       menuOnLeftClick: true,
     }
 
-    return TrayIcon.new(options)
+    const newTray = await TrayIcon.new(options)
+    trayInitialized.value = true
+    
+    // Tetapkan callback untuk pembaruan menu saat bahasa berubah
+    setUpdateMenuCallback(() => {
+      debouncedUpdateTrayMenu()
+    })
+    
+    return newTray
   }
 
   const getTrayById = () => {
@@ -111,5 +139,6 @@ export function useTray() {
 
   return {
     createTray,
+    updateTrayMenu
   }
 }

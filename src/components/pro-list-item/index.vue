@@ -3,7 +3,7 @@ import { Flex } from 'ant-design-vue'
 import { computed, useSlots } from 'vue'
 
 const { title, icon, description, vertical } = defineProps<{
-  title: string
+  title?: string
   icon?: string
   description?: string
   vertical?: boolean
@@ -27,19 +27,20 @@ const hasDescription = computed(() => {
     justify="space-between"
     :vertical="vertical"
   >
-    <Flex align="center">
+    <Flex align="center" :class="{ 'w-full': vertical }">
       <slot name="icon">
         <div
-          class="text-4"
+          v-if="icon"
+          class="text-4 min-w-8 flex-shrink-0"
           :class="icon"
         />
       </slot>
 
       <Flex
-        :class="{ 'ml-4': hasIcon }"
+        :class="{ 'ml-4': hasIcon, 'w-full': vertical }"
         vertical
       >
-        <div class="text-sm font-medium min-w-40">
+        <div v-if="title" class="text-sm font-medium">
           {{ title }}
         </div>
 
@@ -57,3 +58,15 @@ const hasDescription = computed(() => {
     <slot />
   </Flex>
 </template>
+
+<style scoped>
+.min-w-8 {
+  min-width: 2rem;
+}
+.w-full {
+  width: 100%;
+}
+.flex-shrink-0 {
+  flex-shrink: 0;
+}
+</style>
