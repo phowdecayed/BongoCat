@@ -25,5 +25,11 @@ const { title } = defineProps<{
     >
       <slot />
     </Flex>
-  </FLex>
+  </Flex>
 </template>
+
+<style scoped>
+.mb-4 {
+  margin-bottom: 1rem;
+}
+</style>

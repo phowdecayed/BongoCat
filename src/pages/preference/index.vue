@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Flex } from 'ant-design-vue'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 import About from './components/about/index.vue'
 import Cat from './components/cat/index.vue'
@@ -10,41 +11,49 @@ import Model from './components/model/index.vue'
 import UpdateApp from '@/components/update-app/index.vue'
 import { useTray } from '@/composables/useTray'
 import { useAppStore } from '@/stores/app'
+import { useLanguageStore } from '@/stores/language'
 import { isMac } from '@/utils/platform'
 
-const { createTray } = useTray()
+const { createTray, updateTrayMenu } = useTray()
 const appStore = useAppStore()
+const languageStore = useLanguageStore()
 const current = ref(0)
+const { t, locale } = useI18n()
 
 onMounted(async () => {
-  createTray()
+  await createTray()
 })
 
-const menus = [
+// Watch untuk perubahan bahasa
+watch(() => languageStore.language, () => {
+  updateTrayMenu()
+}, { immediate: true })
+
+const menus = computed(() => [
   {
-    label: '猫咪设置',
+    label: t('preference.menus.cat'),
     icon: 'i-solar:cat-bold',
     component: Cat,
   },
   {
-    label: '通用设置',
+    label: t('preference.menus.general'),
     icon: 'i-solar:settings-minimalistic-bold',
     component: General,
   },
   {
-    label: '模型管理',
+    label: t('preference.menus.model'),
     icon: 'i-solar:magic-stick-3-bold',
     component: Model,
   },
   {
-    label: '关于',
+    label: t('preference.menus.about'),
     icon: 'i-solar:info-circle-bold',
     component: About,
   },
-]
+])
 
 const currentComponent = computed(() => {
-  return menus[current.value].component
+  return menus.value[current.value].component
 })
 </script>
 
@@ -66,7 +75,7 @@ const currentComponent = computed(() => {
         <span class="font-bold">{{ appStore.name }}</span>
       </div>
 
-      <div class="flex flex-col gap-2">
+      <div class="flex flex-col gap-2 w-full px-2">
         <div
           v-for="(item, index) in menus"
           :key="item.label"
@@ -79,13 +88,13 @@ const currentComponent = computed(() => {
             :class="item.icon"
           />
 
-          <span>{{ item.label }}</span>
+          <span class="text-center whitespace-normal text-sm px-1">{{ item.label }}</span>
         </div>
       </div>
     </div>
 
     <div
-      class="flex-1 bg-color-8 p-4"
+      class="flex-1 bg-color-8 p-4 overflow-auto"
       data-tauri-drag-region
     >
       <component :is="currentComponent" />
@@ -94,3 +103,9 @@ const currentComponent = computed(() => {
 
   <UpdateApp />
 </template>
+
+<style scoped>
+.text-center {
+  text-align: center;
+}
+</style>

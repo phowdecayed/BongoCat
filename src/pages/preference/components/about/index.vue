@@ -2,6 +2,7 @@
 import { emit } from '@tauri-apps/api/event'
 import { openUrl } from '@tauri-apps/plugin-opener'
 import { Button } from 'ant-design-vue'
+import { useI18n } from 'vue-i18n'
 
 import ProList from '@/components/pro-list/index.vue'
 import ProListItem from '@/components/pro-list-item/index.vue'
@@ -9,6 +10,7 @@ import { GITHUB_LINK, LISTEN_KEY } from '@/constants'
 import { useAppStore } from '@/stores/app'
 
 const appStore = useAppStore()
+const { t } = useI18n()
 
 function handleUpdate() {
   emit(LISTEN_KEY.UPDATE_APP)
@@ -20,16 +22,16 @@ function feedbackIssue() {
 </script>
 
 <template>
-  <ProList title="关于软件">
+  <ProList :title="t('about.aboutApp')">
     <ProListItem
-      :description="`版本：v${appStore.version}`"
+      :description="`${t('about.version')}: v${appStore.version}`"
       :title="appStore.name"
     >
       <Button
         type="primary"
         @click="handleUpdate"
       >
-        检查更新
+        {{ t('about.checkForUpdates') }}
       </Button>
 
       <template #icon>
@@ -42,12 +44,12 @@ function feedbackIssue() {
       </template>
     </ProListItem>
 
-    <ProListItem title="开源地址">
+    <ProListItem :title="t('about.openSource')">
       <Button
         danger
         @click="feedbackIssue"
       >
-        反馈问题
+        {{ t('about.reportIssue') }}
       </Button>
 
       <template #description>

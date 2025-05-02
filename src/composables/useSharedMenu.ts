@@ -1,9 +1,12 @@
 import type { CatMode } from '@/stores/cat'
 
 import { CheckMenuItem, MenuItem, PredefinedMenuItem, Submenu } from '@tauri-apps/api/menu'
+import { computed, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 import { hideWindow, showWindow } from '@/plugins/window'
 import { useCatStore } from '@/stores/cat'
+import { useLanguageStore } from '@/stores/language'
 import { isMac } from '@/utils/platform'
 
 interface ModeOption {
@@ -13,10 +16,13 @@ interface ModeOption {
 
 export function useSharedMenu() {
   const catStore = useCatStore()
-  const modeOptions: ModeOption[] = [
-    { label: '标准模式', value: 'standard' },
-    { label: '键盘模式', value: 'keyboard' },
-  ]
+  const languageStore = useLanguageStore()
+  const { t, locale } = useI18n()
+  
+  const modeOptions = computed<ModeOption[]>(() => [
+    { label: t('cat.modes.standard'), value: 'standard' },
+    { label: t('cat.modes.keyboard'), value: 'keyboard' },
+  ])
 
   const getOpacityMenuItems = async () => {
     const options = [25, 50, 75, 100]
@@ -45,12 +51,12 @@ export function useSharedMenu() {
   const getSharedMenu = async () => {
     return await Promise.all([
       MenuItem.new({
-        text: '偏好设置...',
+        text: t('tray.preferences'),
         accelerator: isMac ? 'Cmd+,' : '',
         action: () => showWindow('preference'),
       }),
       MenuItem.new({
-        text: catStore.visible ? '隐藏猫咪' : '显示猫咪',
+        text: catStore.visible ? t('tray.hideCat') : t('tray.showCat'),
         action: () => {
           if (catStore.visible) {
             hideWindow('main')
@@ -63,9 +69,9 @@ export function useSharedMenu() {
       }),
       PredefinedMenuItem.new({ item: 'Separator' }),
       Submenu.new({
-        text: '猫咪模式',
+        text: t('tray.catMode'),
         items: await Promise.all(
-          modeOptions.map((item) => {
+          modeOptions.value.map((item) => {
             return CheckMenuItem.new({
               text: item.label,
               checked: catStore.mode === item.value,
@@ -77,18 +83,18 @@ export function useSharedMenu() {
         ),
       }),
       CheckMenuItem.new({
-        text: '窗口穿透',
+        text: t('cat.penetrable'),
         checked: catStore.penetrable,
         action: () => {
           catStore.penetrable = !catStore.penetrable
         },
       }),
       Submenu.new({
-        text: '不透明度',
+        text: t('tray.opacity'),
         items: await getOpacityMenuItems(),
       }),
       CheckMenuItem.new({
-        text: '镜像模式',
+        text: t('cat.mirrorMode'),
         checked: catStore.mirrorMode,
         action: () => {
           catStore.mirrorMode = !catStore.mirrorMode
@@ -97,7 +103,23 @@ export function useSharedMenu() {
     ])
   }
 
+  // Observer untuk perubahan bahasa
+  let updateMenuCallback: (() => void) | null = null
+  
+  // Fungsi untuk menetapkan callback pembaruan menu
+  const setUpdateMenuCallback = (callback: () => void) => {
+    updateMenuCallback = callback
+  }
+  
+  // Watch perubahan bahasa dan perbarui menu
+  watch(locale, () => {
+    if (updateMenuCallback) {
+      updateMenuCallback()
+    }
+  })
+
   return {
     getSharedMenu,
+    setUpdateMenuCallback,
   }
 }

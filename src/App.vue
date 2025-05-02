@@ -10,6 +10,7 @@ import { RouterView } from 'vue-router'
 
 import { useTauriListen } from './composables/useTauriListen'
 import { useThemeVars } from './composables/useThemeVars'
+import { useLanguage } from './composables/useLanguage'
 import { useWindowState } from './composables/useWindowState'
 import { LISTEN_KEY } from './constants'
 import { hideWindow, showWindow } from './plugins/window'
@@ -17,12 +18,15 @@ import { useAppStore } from './stores/app'
 import { useCatStore } from './stores/cat'
 import { useGeneralStore } from './stores/general'
 import { useModelStore } from './stores/model'
+import { useLanguageStore } from './stores/language'
 
 const { generateColorVars } = useThemeVars()
 const appStore = useAppStore()
 const modelStore = useModelStore()
 const catStore = useCatStore()
 const generalStore = useGeneralStore()
+const languageStore = useLanguageStore()
+const { initLanguage } = useLanguage()
 const appWindow = getCurrentWebviewWindow()
 const { isRestored, restoreState } = useWindowState()
 
@@ -33,6 +37,10 @@ onMounted(async () => {
   await modelStore.$tauri.start()
   await catStore.$tauri.start()
   await generalStore.$tauri.start()
+  await languageStore.$tauri.start()
+  
+  // Initialize language after stores have loaded
+  initLanguage(languageStore.language)
 
   restoreState()
 })
