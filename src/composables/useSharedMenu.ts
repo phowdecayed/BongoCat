@@ -1,6 +1,7 @@
 import type { CatMode } from '@/stores/cat'
 
 import { CheckMenuItem, MenuItem, PredefinedMenuItem, Submenu } from '@tauri-apps/api/menu'
+import { useI18n } from 'vue-i18n'
 
 import { hideWindow, showWindow } from '@/plugins/window'
 import { useCatStore } from '@/stores/cat'
@@ -13,9 +14,11 @@ interface ModeOption {
 
 export function useSharedMenu() {
   const catStore = useCatStore()
+  const { t } = useI18n()
+  
   const modeOptions: ModeOption[] = [
-    { label: '标准模式', value: 'standard' },
-    { label: '键盘模式', value: 'keyboard' },
+    { label: t('cat.modes.standard'), value: 'standard' },
+    { label: t('cat.modes.keyboard'), value: 'keyboard' },
   ]
 
   const getOpacityMenuItems = async () => {
@@ -45,12 +48,12 @@ export function useSharedMenu() {
   const getSharedMenu = async () => {
     return await Promise.all([
       MenuItem.new({
-        text: '偏好设置...',
+        text: t('tray.preferences'),
         accelerator: isMac ? 'Cmd+,' : '',
         action: () => showWindow('preference'),
       }),
       MenuItem.new({
-        text: catStore.visible ? '隐藏猫咪' : '显示猫咪',
+        text: catStore.visible ? t('tray.hideCat') : t('tray.showCat'),
         action: () => {
           if (catStore.visible) {
             hideWindow('main')
@@ -63,7 +66,7 @@ export function useSharedMenu() {
       }),
       PredefinedMenuItem.new({ item: 'Separator' }),
       Submenu.new({
-        text: '猫咪模式',
+        text: t('tray.catMode'),
         items: await Promise.all(
           modeOptions.map((item) => {
             return CheckMenuItem.new({
@@ -77,18 +80,18 @@ export function useSharedMenu() {
         ),
       }),
       CheckMenuItem.new({
-        text: '窗口穿透',
+        text: t('cat.penetrable'),
         checked: catStore.penetrable,
         action: () => {
           catStore.penetrable = !catStore.penetrable
         },
       }),
       Submenu.new({
-        text: '不透明度',
+        text: t('tray.opacity'),
         items: await getOpacityMenuItems(),
       }),
       CheckMenuItem.new({
-        text: '镜像模式',
+        text: t('cat.mirrorMode'),
         checked: catStore.mirrorMode,
         action: () => {
           catStore.mirrorMode = !catStore.mirrorMode

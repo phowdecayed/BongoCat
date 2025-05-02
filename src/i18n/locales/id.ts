@@ -17,10 +17,18 @@ export default {
     opacity: 'Transparansi',
     mirrorMode: 'Mode Cermin',
     penetrable: 'Mode Tembus',
+    penetrableDescription: 'Saat diaktifkan, jendela tidak menghalangi interaksi dengan aplikasi lain',
     backgroundImage: 'Gambar Latar',
     reset: 'Reset',
     choose: 'Pilih',
-    clearImage: 'Hapus Gambar'
+    clearImage: 'Hapus Gambar',
+    modeSettings: 'Pengaturan Mode',
+    windowSettings: 'Pengaturan Jendela',
+    selectMode: 'Pilih Mode',
+    modes: {
+      standard: 'Mode Standar',
+      keyboard: 'Mode Keyboard'
+    }
   },
   general: {
     section: {
@@ -46,19 +54,39 @@ export default {
     addModel: 'Tambah Model',
     removeModel: 'Hapus Model',
     modelInfo: 'Informasi Model',
-    noModelSelected: 'Tidak Ada Model Dipilih'
+    noModelSelected: 'Tidak Ada Model Dipilih',
+    comingSoon: 'Segera Hadir'
   },
   about: {
     version: 'Versi',
     checkForUpdates: 'Periksa Pembaruan',
     github: 'GitHub',
-    license: 'Lisensi'
+    license: 'Lisensi',
+    aboutApp: 'Tentang Aplikasi',
+    openSource: 'Alamat Open Source',
+    reportIssue: 'Laporkan Masalah'
   },
   updateApp: {
     newVersion: 'Versi Baru Tersedia',
     currentVersion: 'Versi Saat Ini',
     description: 'Catatan Rilis',
     download: 'Unduh dan Pasang',
-    later: 'Nanti'
+    later: 'Nanti',
+    updateDate: 'Tanggal Pembaruan',
+    updateNotes: 'Catatan Pembaruan',
+    updateVersion: 'Versi Pembaruan',
+    updateFound: 'Pembaruan Ditemukan',
+    alreadyLatest: 'Sudah Versi Terbaru',
+    updating: 'Memperbarui...'
+  },
+  tray: {
+    preferences: 'Pengaturan...',
+    showCat: 'Tampilkan Kucing',
+    hideCat: 'Sembunyikan Kucing',
+    catMode: 'Mode Kucing',
+    opacity: 'Transparansi',
+    restart: 'Mulai Ulang Aplikasi',
+    quit: 'Keluar Aplikasi',
+    version: 'Versi'
   }
 } 

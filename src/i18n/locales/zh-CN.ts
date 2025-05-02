@@ -17,10 +17,18 @@ export default {
     opacity: '透明度',
     mirrorMode: '镜像模式',
     penetrable: '穿透模式',
+    penetrableDescription: '启用后，窗口不影响对其他应用程序的操作',
     backgroundImage: '背景图片',
     reset: '重置',
     choose: '选择',
-    clearImage: '清除图片'
+    clearImage: '清除图片',
+    modeSettings: '模式设置',
+    windowSettings: '窗口设置',
+    selectMode: '选择模式',
+    modes: {
+      standard: '标准模式',
+      keyboard: '键盘模式'
+    }
   },
   general: {
     section: {
@@ -46,19 +54,39 @@ export default {
     addModel: '添加模型',
     removeModel: '移除模型',
     modelInfo: '模型信息',
-    noModelSelected: '未选择模型'
+    noModelSelected: '未选择模型',
+    comingSoon: '敬请期待'
   },
   about: {
     version: '版本',
     checkForUpdates: '检查更新',
     github: 'GitHub',
-    license: '许可证'
+    license: '许可证',
+    aboutApp: '关于软件',
+    openSource: '开源地址',
+    reportIssue: '反馈问题'
   },
   updateApp: {
     newVersion: '发现新版本',
     currentVersion: '当前版本',
     description: '更新说明',
     download: '下载安装',
-    later: '稍后再说'
+    later: '稍后再说',
+    updateDate: '更新时间',
+    updateNotes: '更新日志',
+    updateVersion: '更新版本',
+    updateFound: '发现新版本🥳',
+    alreadyLatest: '当前已是最新版本🎉',
+    updating: '立即更新'
+  },
+  tray: {
+    preferences: '偏好设置...',
+    showCat: '显示猫咪',
+    hideCat: '隐藏猫咪',
+    catMode: '猫咪模式',
+    opacity: '不透明度',
+    restart: '重启应用',
+    quit: '退出应用',
+    version: '版本'
   }
 } 
