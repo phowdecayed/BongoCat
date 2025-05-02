@@ -3,6 +3,7 @@ import { Menu } from '@tauri-apps/api/menu'
 import { getCurrentWebviewWindow } from '@tauri-apps/api/webviewWindow'
 import { useDebounceFn, useEventListener } from '@vueuse/core'
 import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 import { useDevice } from '@/composables/useDevice'
 import { useModel } from '@/composables/useModel'
@@ -14,6 +15,7 @@ const { pressedMouses, mousePosition, pressedKeys } = useDevice()
 const { backgroundImagePath, handleLoad, handleDestroy, handleResize, handleMouseDown, handleMouseMove, handleKeyDown } = useModel()
 const catStore = useCatStore()
 const { getSharedMenu } = useSharedMenu()
+const { t } = useI18n()
 
 const resizing = ref(false)
 
@@ -85,7 +87,7 @@ function resolveImageURL(key: string) {
       class="flex items-center justify-center bg-black"
     >
       <span class="text-center text-5xl text-white">
-        重绘中...
+        {{ t('main.redrawing') }}
       </span>
     </div>
   </div>
