@@ -17,6 +17,7 @@ export default {
     opacity: '透明度',
     mirrorMode: '镜像模式',
     scale: '尺寸',
+    scaleDescription: '请输入一个 {min} 到 {max} 之间的尺寸值',
     penetrable: '穿透模式',
     penetrableDescription: '启用后，窗口不影响对其他应用程序的操作',
     backgroundImage: '背景图片',

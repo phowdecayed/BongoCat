@@ -17,6 +17,7 @@ export default {
     opacity: 'Transparansi',
     mirrorMode: 'Mode Cermin',
     scale: 'Ukuran',
+    scaleDescription: 'Masukkan nilai ukuran antara {min} sampai {max}',
     penetrable: 'Mode Tembus',
     penetrableDescription: 'Saat diaktifkan, jendela tidak menghalangi interaksi dengan aplikasi lain',
     backgroundImage: 'Gambar Latar',

@@ -17,6 +17,7 @@ export default {
     opacity: 'Opacity',
     mirrorMode: 'Mirror Mode',
     scale: 'Size',
+    scaleDescription: 'Enter a size value between {min} and {max}',
     penetrable: 'Transparent Mode',
     penetrableDescription: 'When enabled, the window does not block interaction with other applications',
     backgroundImage: 'Background Image',
