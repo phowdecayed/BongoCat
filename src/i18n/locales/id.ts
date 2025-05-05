@@ -106,6 +106,19 @@ export default {
     opacity: 'Transparansi',
     restart: 'Mulai Ulang Aplikasi',
     quit: 'Keluar Aplikasi',
-    version: 'Versi'
+    version: 'Versi',
+    shortcuts: {
+      title: 'Pintasan Keyboard',
+      preferences: 'Pengaturan (Ctrl+,)',
+      show_hide: 'Tampilkan/Sembunyikan Kucing (Ctrl+H)',
+      std_mode: 'Mode Standar (Ctrl+1)',
+      kbd_mode: 'Mode Keyboard (Ctrl+2)',
+      penetrable: 'Mode Tembus (Ctrl+P)',
+      mirror: 'Mode Cermin (Ctrl+M)',
+      updates: 'Periksa Pembaruan (Ctrl+U)',
+      github: 'Buka GitHub (Ctrl+G)',
+      restart: 'Mulai Ulang (Ctrl+R)',
+      quit: 'Keluar (Ctrl+Q)'
+    }
   }
 } 

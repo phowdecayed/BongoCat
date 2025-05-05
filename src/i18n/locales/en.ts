@@ -106,6 +106,19 @@ export default {
     opacity: 'Opacity',
     restart: 'Restart App',
     quit: 'Quit App',
-    version: 'Version'
+    version: 'Version',
+    shortcuts: {
+      title: 'Keyboard Shortcuts',
+      preferences: 'Preferences (Ctrl+,)',
+      show_hide: 'Show/Hide Cat (Ctrl+H)',
+      std_mode: 'Standard Mode (Ctrl+1)',
+      kbd_mode: 'Keyboard Mode (Ctrl+2)',
+      penetrable: 'Transparent Mode (Ctrl+P)',
+      mirror: 'Mirror Mode (Ctrl+M)',
+      updates: 'Check Updates (Ctrl+U)',
+      github: 'Open GitHub (Ctrl+G)',
+      restart: 'Restart (Ctrl+R)',
+      quit: 'Quit (Ctrl+Q)'
+    }
   }
 } 

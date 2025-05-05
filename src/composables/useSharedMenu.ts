@@ -50,11 +50,12 @@ export function useSharedMenu() {
     return await Promise.all([
       MenuItem.new({
         text: t('tray.preferences'),
-        accelerator: isMac ? 'Cmd+,' : '',
+        accelerator: isMac ? 'Cmd+,' : 'Ctrl+,',
         action: () => showWindow('preference'),
       }),
       MenuItem.new({
         text: catStore.visible ? t('tray.hideCat') : t('tray.showCat'),
+        accelerator: isMac ? 'Cmd+H' : 'Ctrl+H',
         action: () => {
           if (catStore.visible) {
             hideWindow('main')
@@ -69,10 +70,11 @@ export function useSharedMenu() {
       Submenu.new({
         text: t('tray.catMode'),
         items: await Promise.all(
-          modeOptions.value.map((item) => {
+          modeOptions.value.map((item, index) => {
             return CheckMenuItem.new({
               text: item.label,
               checked: catStore.mode === item.value,
+              accelerator: isMac ? `Cmd+${index + 1}` : `Ctrl+${index + 1}`,
               action: () => {
                 catStore.mode = item.value
               },
@@ -83,6 +85,7 @@ export function useSharedMenu() {
       CheckMenuItem.new({
         text: t('cat.penetrable'),
         checked: catStore.penetrable,
+        accelerator: isMac ? 'Cmd+P' : 'Ctrl+P',
         action: () => {
           catStore.penetrable = !catStore.penetrable
         },
@@ -94,6 +97,7 @@ export function useSharedMenu() {
       CheckMenuItem.new({
         text: t('cat.mirrorMode'),
         checked: catStore.mirrorMode,
+        accelerator: isMac ? 'Cmd+M' : 'Ctrl+M',
         action: () => {
           catStore.mirrorMode = !catStore.mirrorMode
         },

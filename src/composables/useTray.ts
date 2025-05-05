@@ -2,7 +2,7 @@ import type { TrayIconOptions } from '@tauri-apps/api/tray'
 
 import { getName, getVersion } from '@tauri-apps/api/app'
 import { emit } from '@tauri-apps/api/event'
-import { Menu, MenuItem, PredefinedMenuItem } from '@tauri-apps/api/menu'
+import { Menu, MenuItem, PredefinedMenuItem, Submenu } from '@tauri-apps/api/menu'
 import { resolveResource } from '@tauri-apps/api/path'
 import { TrayIcon } from '@tauri-apps/api/tray'
 import { openUrl } from '@tauri-apps/plugin-opener'
@@ -90,14 +90,67 @@ export function useTray() {
     return TrayIcon.getById(TRAY_ID)
   }
 
+  const getShortcutsSubmenu = async () => {
+    const items = await Promise.all([
+      MenuItem.new({
+        text: t('tray.shortcuts.preferences'),
+        enabled: false,
+      }),
+      MenuItem.new({
+        text: t('tray.shortcuts.show_hide'),
+        enabled: false,
+      }),
+      MenuItem.new({
+        text: t('tray.shortcuts.std_mode'),
+        enabled: false,
+      }),
+      MenuItem.new({
+        text: t('tray.shortcuts.kbd_mode'),
+        enabled: false,
+      }),
+      MenuItem.new({
+        text: t('tray.shortcuts.penetrable'),
+        enabled: false,
+      }),
+      MenuItem.new({
+        text: t('tray.shortcuts.mirror'),
+        enabled: false,
+      }),
+      MenuItem.new({
+        text: t('tray.shortcuts.updates'),
+        enabled: false,
+      }),
+      MenuItem.new({
+        text: t('tray.shortcuts.github'),
+        enabled: false,
+      }),
+      MenuItem.new({
+        text: t('tray.shortcuts.restart'),
+        enabled: false,
+      }),
+      MenuItem.new({
+        text: t('tray.shortcuts.quit'),
+        enabled: false,
+      }),
+    ]);
+    
+    return Submenu.new({
+      text: t('tray.shortcuts.title'),
+      items,
+    });
+  }
+
   const getTrayMenu = async () => {
     const appVersion = await getVersion()
 
     const items = await Promise.all([
       ...await getSharedMenu(),
       PredefinedMenuItem.new({ item: 'Separator' }),
+      await getShortcutsSubmenu(),
+      PredefinedMenuItem.new({ item: 'Separator' }),
       MenuItem.new({
         text: t('about.checkForUpdates'),
+        accelerator: isMac ? 'Cmd+U' : 'Ctrl+U',
         action: () => {
           showWindow()
 
@@ -106,6 +159,7 @@ export function useTray() {
       }),
       MenuItem.new({
         text: t('about.openSource'),
+        accelerator: isMac ? 'Cmd+G' : 'Ctrl+G',
         action: () => openUrl(GITHUB_LINK),
       }),
       PredefinedMenuItem.new({ item: 'Separator' }),
@@ -115,11 +169,12 @@ export function useTray() {
       }),
       MenuItem.new({
         text: t('tray.restart'),
+        accelerator: isMac ? 'Cmd+R' : 'Ctrl+R',
         action: relaunch,
       }),
       MenuItem.new({
         text: t('tray.quit'),
-        accelerator: isMac ? 'Cmd+Q' : '',
+        accelerator: isMac ? 'Cmd+Q' : 'Ctrl+Q',
         action: () => exit(0),
       }),
     ])
