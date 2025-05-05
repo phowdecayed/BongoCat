@@ -91,8 +91,6 @@ export function useTray() {
   }
 
   const getShortcutsSubmenu = async () => {
-    const modKey = isMac ? 'Cmd' : 'Ctrl';
-    
     const items = await Promise.all([
       MenuItem.new({
         text: t('tray.shortcuts.preferences'),
