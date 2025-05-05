@@ -16,6 +16,7 @@ export default {
   cat: {
     opacity: 'Transparansi',
     mirrorMode: 'Mode Cermin',
+    scale: 'Ukuran',
     penetrable: 'Mode Tembus',
     penetrableDescription: 'Saat diaktifkan, jendela tidak menghalangi interaksi dengan aplikasi lain',
     backgroundImage: 'Gambar Latar',

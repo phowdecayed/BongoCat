@@ -55,5 +55,18 @@ const modeList: SelectProps['options'] = [
     <ProListItem :title="t('cat.mirrorMode')">
       <Switch v-model:checked="catStore.mirrorMode" />
     </ProListItem>
+
+    <ProListItem
+      :title="t('cat.scale')"
+      vertical
+    >
+      <Slider
+        v-model:value="catStore.scale"
+        :min="0.5"
+        :max="2"
+        :step="0.1"
+        class="m-0!"
+      />
+    </ProListItem>
   </ProList>
 </template>

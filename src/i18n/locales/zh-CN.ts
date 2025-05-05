@@ -16,6 +16,7 @@ export default {
   cat: {
     opacity: '透明度',
     mirrorMode: '镜像模式',
+    scale: '尺寸',
     penetrable: '穿透模式',
     penetrableDescription: '启用后，窗口不影响对其他应用程序的操作',
     backgroundImage: '背景图片',

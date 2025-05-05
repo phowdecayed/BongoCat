@@ -16,6 +16,7 @@ export default {
   cat: {
     opacity: 'Opacity',
     mirrorMode: 'Mirror Mode',
+    scale: 'Size',
     penetrable: 'Transparent Mode',
     penetrableDescription: 'When enabled, the window does not block interaction with other applications',
     backgroundImage: 'Background Image',
