@@ -1,8 +1,12 @@
 <script setup lang="ts">
 import { disable, enable, isEnabled } from '@tauri-apps/plugin-autostart'
 import { Select, Switch } from 'ant-design-vue'
+import type { SelectValue } from 'ant-design-vue/es/select'
+import type { DefaultOptionType } from 'ant-design-vue/es/select'
 import { computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+
+import MacosPermissions from './components/macos-permissions/index.vue'
 
 import ProList from '@/components/pro-list/index.vue'
 import ProListItem from '@/components/pro-list-item/index.vue'
@@ -36,22 +40,23 @@ watch(() => generalStore.autostart, async (value) => {
   }
 })
 
-const handleLanguageChange = async (value: Language) => {
-  languageStore.setLanguage(value)
-  setLanguage(value)
-  
-  // Perbarui menu tray setelah perubahan bahasa
-  setTimeout(() => {
-    updateTrayMenu()
-  }, 100)
+const handleLanguageChange = async (value: SelectValue) => {
+  if (value) {
+    languageStore.setLanguage(value as Language)
+    setLanguage(value as Language)
+    
+    // Perbarui menu tray setelah perubahan bahasa
+    setTimeout(() => {
+      updateTrayMenu()
+    }, 100)
+  }
 }
 </script>
 
 <template>
+  <MacosPermissions />
+
   <ProList :title="t('general.section.application')">
-    <ProListItem :title="t('general.alwaysOnTop')">
-      <Switch v-model:checked="generalStore.alwaysOnTop" />
-    </ProListItem>
     <ProListItem :title="t('general.launchAtLogin')">
       <Switch v-model:checked="generalStore.autostart" />
     </ProListItem>
