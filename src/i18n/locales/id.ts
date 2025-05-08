@@ -16,6 +16,8 @@ export default {
   cat: {
     opacity: 'Transparansi',
     mirrorMode: 'Mode Cermin',
+    scale: 'Ukuran',
+    scaleDescription: 'Masukkan nilai ukuran antara {min} sampai {max}',
     penetrable: 'Mode Tembus',
     penetrableDescription: 'Saat diaktifkan, jendela tidak menghalangi interaksi dengan aplikasi lain',
     backgroundImage: 'Gambar Latar',
@@ -45,6 +47,17 @@ export default {
         en: 'English',
         id: 'Bahasa Indonesia',
         'zh-CN': '简体中文'
+      }
+    },
+    permissions: {
+      title: 'Pengaturan Izin',
+      authorized: 'Diizinkan',
+      authorize: 'Berikan Izin',
+      inputMonitoring: {
+        title: 'Izin Pemantauan Input',
+        description: 'Aktifkan izin pemantauan input untuk menerima kejadian keyboard dan mouse sistem sebagai respons terhadap tindakan Anda.',
+        instructions: 'Jika izin sudah diaktifkan, pilih terlebih dahulu dan klik tombol "-" untuk menghapusnya, lalu tambahkan kembali secara manual, dan restart aplikasi untuk memastikan izin berlaku.',
+        openSettings: 'Buka Pengaturan'
       }
     }
   },

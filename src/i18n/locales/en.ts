@@ -16,6 +16,8 @@ export default {
   cat: {
     opacity: 'Opacity',
     mirrorMode: 'Mirror Mode',
+    scale: 'Size',
+    scaleDescription: 'Enter a size value between {min} and {max}',
     penetrable: 'Transparent Mode',
     penetrableDescription: 'When enabled, the window does not block interaction with other applications',
     backgroundImage: 'Background Image',
@@ -45,6 +47,17 @@ export default {
         en: 'English',
         id: 'Bahasa Indonesia',
         'zh-CN': '简体中文'
+      }
+    },
+    permissions: {
+      title: 'Permission Settings',
+      authorized: 'Authorized',
+      authorize: 'Authorize',
+      inputMonitoring: {
+        title: 'Input Monitoring Permission',
+        description: 'Enable input monitoring permission to receive system keyboard and mouse events in response to your actions.',
+        instructions: 'If the permission is already enabled, first select it and click the "-" button to remove it, then manually add it back, and restart the application to ensure the permission takes effect.',
+        openSettings: 'Open Settings'
       }
     }
   },

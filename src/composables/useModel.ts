@@ -19,6 +19,7 @@ export function useModel() {
   const modelStore = useModelStore()
 
   watch(() => catStore.mode, handleLoad)
+  watch(() => catStore.scale, handleResize)
 
   const backgroundImagePath = computed(() => {
     if (modelStore.selectedModelId !== 'standard' && 
@@ -111,27 +112,26 @@ export function useModel() {
 
     if (!monitor) return
 
-    const { size, cursorX, cursorY } = monitor
-    const { width, height } = size
+    const { size, position, cursorPosition } = monitor
 
-    const xRatio = cursorX / width
-    const yRatio = cursorY / height
+    const xRatio = (cursorPosition.x - position.x) / size.width
+    const yRatio = (cursorPosition.y - position.y) / size.height
 
     const x = (xRatio * 60) - 30
     const y = (yRatio * 60) - 30
 
-    live2d.setParameterValue('ParamMouseX', -x)
-    live2d.setParameterValue('ParamMouseY', -y)
-    live2d.setParameterValue('ParamAngleX', x)
-    live2d.setParameterValue('ParamAngleY', -y)
+      live2d.setParameterValue('ParamMouseX', -x)
+      live2d.setParameterValue('ParamMouseY', -y)
+      live2d.setParameterValue('ParamAngleX', x)
+      live2d.setParameterValue('ParamAngleY', -y)
   }
 
   function handleMouseDown(value: string[]) {
     const hasLeftDown = value.includes('Left')
     const hasRightDown = value.includes('Right')
 
-    live2d.setParameterValue('ParamMouseLeftDown', hasLeftDown)
-    live2d.setParameterValue('ParamMouseRightDown', hasRightDown)
+      live2d.setParameterValue('ParamMouseLeftDown', hasLeftDown)
+      live2d.setParameterValue('ParamMouseRightDown', hasRightDown)
   }
 
   return {
