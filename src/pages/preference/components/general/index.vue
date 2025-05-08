@@ -2,7 +2,6 @@
 import { disable, enable, isEnabled } from '@tauri-apps/plugin-autostart'
 import { Select, Switch } from 'ant-design-vue'
 import type { SelectValue } from 'ant-design-vue/es/select'
-import type { DefaultOptionType } from 'ant-design-vue/es/select'
 import { computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
