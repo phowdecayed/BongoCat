@@ -10,6 +10,7 @@ export const useCatStore = defineStore('cat', () => {
   const opacity = ref(100)
   const mirrorMode = ref(false)
   const scale = ref<number>(1.0)
+  const singleMode = ref(false)
 
   watch(mode, (newMode) => {
     localStorage.setItem('bongocat-mode', newMode)
@@ -26,6 +27,7 @@ export const useCatStore = defineStore('cat', () => {
     opacity,
     mirrorMode,
     scale,
+    singleMode,
     $tauri: {
       start() {
         const savedMode = localStorage.getItem('bongocat-mode')
@@ -36,7 +38,7 @@ export const useCatStore = defineStore('cat', () => {
         const savedScale = localStorage.getItem('bongocat-scale')
         if (savedScale) {
           const parsedScale = parseFloat(savedScale)
-          if (!isNaN(parsedScale) && parsedScale > 0) {
+          if (!Number.isNaN(parsedScale) && parsedScale > 0) {
             scale.value = parsedScale
           }
         }
