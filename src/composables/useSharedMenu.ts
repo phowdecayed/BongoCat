@@ -1,6 +1,7 @@
 import type { CatMode } from '@/stores/cat'
 
 import { CheckMenuItem, MenuItem, PredefinedMenuItem, Submenu } from '@tauri-apps/api/menu'
+import { range } from 'es-toolkit'
 import { computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -16,14 +17,38 @@ interface ModeOption {
 export function useSharedMenu() {
   const catStore = useCatStore()
   const { t, locale } = useI18n()
-  
+
   const modeOptions = computed<ModeOption[]>(() => [
     { label: t('cat.modes.standard'), value: 'standard' },
     { label: t('cat.modes.keyboard'), value: 'keyboard' },
   ])
 
+  const getScaleMenuItems = async () => {
+    const options = range(50, 151, 25)
+
+    const items = options.map((item) => {
+      return CheckMenuItem.new({
+        text: item === 100 ? t('cat.default') : `${item}%`,
+        checked: catStore.scale === item,
+        action: () => {
+          catStore.scale = item
+        },
+      })
+    })
+
+    if (!options.includes(catStore.scale)) {
+      items.unshift(CheckMenuItem.new({
+        text: `${catStore.scale}%`,
+        checked: true,
+        enabled: false,
+      }))
+    }
+
+    return Promise.all(items)
+  }
+
   const getOpacityMenuItems = async () => {
-    const options = [25, 50, 75, 100]
+    const options = range(25, 101, 25)
 
     const items = options.map((item) => {
       return CheckMenuItem.new({
@@ -91,6 +116,10 @@ export function useSharedMenu() {
         },
       }),
       Submenu.new({
+        text: t('cat.scale'),
+        items: await getScaleMenuItems(),
+      }),
+      Submenu.new({
         text: t('tray.opacity'),
         items: await getOpacityMenuItems(),
       }),
@@ -107,12 +136,12 @@ export function useSharedMenu() {
 
   // Observer untuk perubahan bahasa
   let updateMenuCallback: (() => void) | null = null
-  
+
   // Fungsi untuk menetapkan callback pembaruan menu
   const setUpdateMenuCallback = (callback: () => void) => {
     updateMenuCallback = callback
   }
-  
+
   // Watch perubahan bahasa dan perbarui menu
   watch(locale, () => {
     if (updateMenuCallback) {

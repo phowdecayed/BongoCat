@@ -33,13 +33,6 @@ export function useTray() {
     updateTrayMenu()
   }, 100)
 
-  // Watch for changes in cat store
-  watch(() => catStore, () => {
-    if (trayInitialized.value) {
-      debouncedUpdateTrayMenu()
-    }
-  }, { deep: true })
-
   // Watch for language changes
   watch(() => languageStore.language, () => {
     if (trayInitialized.value) {
@@ -53,6 +46,12 @@ export function useTray() {
       debouncedUpdateTrayMenu()
     }
   })
+
+  watch(() => languageStore.language, () => {
+    updateTrayMenu()
+  })
+
+  watch(() => catStore, debouncedUpdateTrayMenu, { deep: true })
 
   const createTray = async () => {
     const tray = await getTrayById()
@@ -77,12 +76,12 @@ export function useTray() {
 
     const newTray = await TrayIcon.new(options)
     trayInitialized.value = true
-    
+
     // Tetapkan callback untuk pembaruan menu saat bahasa berubah
     setUpdateMenuCallback(() => {
       debouncedUpdateTrayMenu()
     })
-    
+
     return newTray
   }
 
@@ -132,12 +131,12 @@ export function useTray() {
         text: t('tray.shortcuts.quit'),
         enabled: false,
       }),
-    ]);
-    
+    ])
+
     return Submenu.new({
       text: t('tray.shortcuts.title'),
       items,
-    });
+    })
   }
 
   const getTrayMenu = async () => {
@@ -194,6 +193,6 @@ export function useTray() {
 
   return {
     createTray,
-    updateTrayMenu
+    updateTrayMenu,
   }
 }

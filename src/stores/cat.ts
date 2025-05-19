@@ -17,7 +17,9 @@ export const useCatStore = defineStore('cat', () => {
   })
 
   watch(scale, (newScale) => {
-    localStorage.setItem('bongocat-scale', newScale.toString())
+    if (typeof newScale === 'number') {
+      localStorage.setItem('bongocat-scale', newScale.toString())
+    }
   })
 
   return {
@@ -34,17 +36,17 @@ export const useCatStore = defineStore('cat', () => {
         if (savedMode && (savedMode === 'standard' || savedMode === 'keyboard')) {
           mode.value = savedMode as CatMode
         }
-        
+
         const savedScale = localStorage.getItem('bongocat-scale')
         if (savedScale) {
-          const parsedScale = parseFloat(savedScale)
+          const parsedScale = Number.parseFloat(savedScale)
           if (!Number.isNaN(parsedScale) && parsedScale > 0) {
-            scale.value = parsedScale
+            scale.value = parsedScale < 10 ? parsedScale * 100 : parsedScale
           }
         }
-        
+
         return Promise.resolve()
-      }
-    }
+      },
+    },
   }
 })

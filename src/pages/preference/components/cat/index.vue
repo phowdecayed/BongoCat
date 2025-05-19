@@ -23,7 +23,7 @@ const modeList: SelectProps['options'] = [
 ]
 
 function scaleFormatter(value?: number) {
-  return value === 100 ? 'Default' : `${value}%`
+  return value === 100 ? t('cat.default') : `${value}%`
 }
 
 function opacityFormatter(value?: number) {
@@ -54,15 +54,15 @@ function opacityFormatter(value?: number) {
 
   <ProList :title="t('cat.windowSettings')">
     <ProListItem
-      description="Aktifkan untuk tidak mempengaruhi operasi aplikasi lain"
-      title="Penetrasi Jendela"
+      :description="t('cat.penetrableDescription')"
+      :title="t('cat.penetrable')"
     >
       <Switch v-model:checked="catStore.penetrable" />
     </ProListItem>
 
     <ProListItem
-      description="Anda juga dapat menarik untuk mengubah ukuran jendela saat menggerakkan mouse ke tepi jendela"
-      title="Ukuran Jendela"
+      :description="t('cat.scaleDescription', { min: 50, max: 150 })"
+      :title="t('cat.scale')"
       vertical
     >
       <Slider
@@ -75,7 +75,7 @@ function opacityFormatter(value?: number) {
     </ProListItem>
 
     <ProListItem
-      title="Tidak Transparan"
+      :title="t('cat.opacity')"
       vertical
     >
       <Slider
