@@ -1,7 +1,7 @@
 import type { Ref } from 'vue'
 
 import { useDebounceFn } from '@vueuse/core'
-import { reactive, ref } from 'vue'
+import { reactive, ref, watch } from 'vue'
 
 import { LISTEN_KEY } from '../constants'
 
@@ -43,13 +43,17 @@ function getSupportKeys() {
 
 const supportKeys = getSupportKeys()
 // Menyimpan timer untuk setiap key yang ditekan
-const keyTimeouts = new Map<string, NodeJS.Timeout>();
+const keyTimeouts = new Map<string, NodeJS.Timeout>()
 
 export function useDevice() {
   const pressedMouses = ref<MouseButtonValue[]>([])
   const mousePosition = reactive<MouseMoveValue>({ x: 0, y: 0 })
   const pressedKeys = ref<string[]>([])
   const catStore = useCatStore()
+
+  watch(() => catStore.mode, () => {
+    pressedKeys.value = pressedKeys.value.filter(key => !key.endsWith('Arrow'))
+  })
 
   const debounceCapsLockRelease = useDebounceFn(() => {
     handleRelease(pressedKeys, 'CapsLock')
@@ -59,7 +63,7 @@ export function useDevice() {
     if (!value) return
 
     array.value = [...new Set([...array.value, value])]
-    
+
     // Jika ini adalah key press, tambahkan timeout untuk menghapus key setelah 300ms
     // kecuali untuk CapsLock yang memiliki penanganan khusus
     if (array === pressedKeys && value !== 'CapsLock') {
@@ -67,13 +71,13 @@ export function useDevice() {
       if (keyTimeouts.has(value as string)) {
         clearTimeout(keyTimeouts.get(value as string))
       }
-      
+
       // Buat timer baru untuk menghapus key ini setelah 300ms jika tidak ada release event
       const timer = setTimeout(() => {
         handleRelease(array, value)
         keyTimeouts.delete(value as string)
       }, 300)
-      
+
       keyTimeouts.set(value as string, timer)
     }
   }
@@ -82,7 +86,7 @@ export function useDevice() {
     if (!value) return
 
     array.value = array.value.filter(item => item !== value)
-    
+
     // Hapus timer untuk key ini jika ada
     if (array === pressedKeys && keyTimeouts.has(value as string)) {
       clearTimeout(keyTimeouts.get(value as string))
