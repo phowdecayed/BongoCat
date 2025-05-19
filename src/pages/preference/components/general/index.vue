@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import type { Language } from '@/stores/language'
+import type { SelectValue } from 'ant-design-vue/es/select'
+
 import { disable, enable, isEnabled } from '@tauri-apps/plugin-autostart'
 import { Select, Switch } from 'ant-design-vue'
-import type { SelectValue } from 'ant-design-vue/es/select'
 import { computed, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
 
@@ -12,7 +14,7 @@ import ProListItem from '@/components/pro-list-item/index.vue'
 import { useLanguage } from '@/composables/useLanguage'
 import { useTray } from '@/composables/useTray'
 import { useGeneralStore } from '@/stores/general'
-import { Language, useLanguageStore } from '@/stores/language'
+import { useLanguageStore } from '@/stores/language'
 
 const generalStore = useGeneralStore()
 const languageStore = useLanguageStore()
@@ -24,26 +26,26 @@ const { updateTrayMenu } = useTray()
 const languageOptions = computed(() => [
   { value: 'en', label: t('general.language.options.en') },
   { value: 'id', label: t('general.language.options.id') },
-  { value: 'zh-CN', label: t('general.language.options.zh-CN') }
+  { value: 'zh-CN', label: t('general.language.options.zh-CN') },
 ])
 
 watch(() => generalStore.autostart, async (value) => {
-  const enabled = await isEnabled()
+  const { isEnabled: enabled } = await isEnabled()
 
   if (value && !enabled) {
-    return enable()
+    enable()
   }
 
   if (!value && enabled) {
     disable()
   }
-})
+}, { immediate: true })
 
-const handleLanguageChange = async (value: SelectValue) => {
+async function handleLanguageChange(value: SelectValue) {
   if (value) {
     languageStore.setLanguage(value as Language)
     setLanguage(value as Language)
-    
+
     // Perbarui menu tray setelah perubahan bahasa
     setTimeout(() => {
       updateTrayMenu()
