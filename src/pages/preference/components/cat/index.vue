@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { SelectProps } from 'ant-design-vue'
 
-import { Select, Slider, Switch, Flex } from 'ant-design-vue'
+import { Select, Slider, Switch } from 'ant-design-vue'
 import { useI18n } from 'vue-i18n'
 
 import ProList from '@/components/pro-list/index.vue'
@@ -13,80 +13,76 @@ const { t } = useI18n()
 
 const modeList: SelectProps['options'] = [
   {
-    label: t('cat.modes.standard'),
+    label: 'Mode Standar',
     value: 'standard',
   },
   {
-    label: t('cat.modes.keyboard'),
+    label: 'Mode Keyboard',
     value: 'keyboard',
   },
 ]
+
+function scaleFormatter(value?: number) {
+  return value === 100 ? 'Default' : `${value}%`
+}
+
+function opacityFormatter(value?: number) {
+  return `${value}%`
+}
 </script>
 
 <template>
-  <ProList :title="t('cat.modeSettings')">
-    <ProListItem 
-      :title="t('cat.selectMode')"
-      icon="i-tabler-category"
-    >
+  <ProList title="Pengaturan Model">
+    <ProListItem title="Pilih Mode">
       <Select
         v-model:value="catStore.mode"
         :options="modeList"
-        :title="t('cat.selectMode')"
       />
+    </ProListItem>
+
+    <ProListItem title="Efek Cermin">
+      <Switch v-model:checked="catStore.mirrorMode" />
+    </ProListItem>
+
+    <ProListItem
+      :description="t('cat.singleModeDescription')"
+      title="Mode Tombol Tunggal"
+    >
+      <Switch v-model:checked="catStore.singleMode" />
     </ProListItem>
   </ProList>
 
   <ProList :title="t('cat.windowSettings')">
     <ProListItem
-      :description="t('cat.penetrableDescription')"
-      :title="t('cat.penetrable')"
-      icon="i-tabler-click"
+      description="Aktifkan untuk tidak mempengaruhi operasi aplikasi lain"
+      title="Penetrasi Jendela"
     >
       <Switch v-model:checked="catStore.penetrable" />
     </ProListItem>
 
     <ProListItem
-      :title="t('cat.opacity')"
-      icon="i-tabler-opacity"
+      description="Anda juga dapat menarik untuk mengubah ukuran jendela saat menggerakkan mouse ke tepi jendela"
+      title="Ukuran Jendela"
+      vertical
+    >
+      <Slider
+        v-model:value="catStore.scale"
+        class="m-0!"
+        :max="150"
+        :min="50"
+        :tip-formatter="scaleFormatter"
+      />
+    </ProListItem>
+
+    <ProListItem
+      title="Tidak Transparan"
       vertical
     >
       <Slider
         v-model:value="catStore.opacity"
         class="m-0!"
+        :tip-formatter="opacityFormatter"
       />
-    </ProListItem>
-
-    <ProListItem 
-      :title="t('cat.mirrorMode')"
-      icon="i-tabler-flip-horizontal"
-    >
-      <Switch v-model:checked="catStore.mirrorMode" />
-    </ProListItem>
-
-    <ProListItem
-      :title="t('cat.scale')"
-      :description="t('cat.scaleDescription', { min: 0.5, max: 2 })"
-      icon="i-tabler-resize"
-      vertical
-    >
-      <Flex justify="space-between" align="center" class="mb-2">
-        <Slider
-          v-model:value="catStore.scale"
-          :min="0.5"
-          :max="2"
-          :step="0.1"
-          class="m-0! flex-1 mr-4"
-        />
-        <input
-          v-model.number="catStore.scale"
-          type="number"
-          min="0.5"
-          max="2"
-          step="0.1"
-          class="w-20 text-center border rounded p-1"
-        />
-      </Flex>
     </ProListItem>
   </ProList>
 </template>

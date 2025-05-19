@@ -14,11 +14,11 @@ export default {
     }
   },
   cat: {
-    opacity: 'Transparansi',
+    opacity: 'Tidak Transparan',
     mirrorMode: 'Mode Cermin',
     scale: 'Ukuran',
     scaleDescription: 'Masukkan nilai ukuran antara {min} sampai {max}',
-    penetrable: 'Mode Tembus',
+    penetrable: 'Penetrasi Jendela',
     penetrableDescription: 'Saat diaktifkan, jendela tidak menghalangi interaksi dengan aplikasi lain',
     backgroundImage: 'Gambar Latar',
     reset: 'Reset',
@@ -30,7 +30,8 @@ export default {
     modes: {
       standard: 'Mode Standar',
       keyboard: 'Mode Keyboard'
-    }
+    },
+    singleModeDescription: 'Jika diaktifkan, setiap tangan hanya akan menampilkan satu tombol terakhir yang ditekan'
   },
   general: {
     section: {
