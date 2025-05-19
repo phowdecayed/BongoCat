@@ -66,10 +66,10 @@ function resolveImageURL(key: string) {
 
 <template>
   <div
-    class="relative children:(absolute h-screen w-screen)"
-    :style="{ 
+    class="relative size-screen overflow-hidden children:(absolute size-full)"
+    :style="{
       opacity: catStore.opacity / 100,
-      transform: `scale(${catStore.scale}) ${catStore.mirrorMode ? 'scaleX(-1)' : ''}` 
+      transform: `scale(${catStore.scale}) ${catStore.mirrorMode ? 'scaleX(-1)' : ''}`,
     }"
     @contextmenu="handleContextmenu"
     @mousedown="handleWindowDrag"
